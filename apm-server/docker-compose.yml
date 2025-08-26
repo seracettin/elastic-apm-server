@@ -1,0 +1,130 @@
+version: '3.7'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=true  # Enable security for Fleet
+      - xpack.security.authc.api_key.enabled=true  # Enable API keys
+      - ELASTIC_PASSWORD=25ELstkP*  # Default elastic user password
+      - xpack.security.enrollment.enabled=false  # Disable enrollment for simplicity
+      - xpack.security.transport.ssl.enabled=false  # Disable transport SSL for dev
+      - xpack.security.http.ssl.enabled=false  # Disable HTTP SSL for dev
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - TZ=Europe/Istanbul
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-f", "-u", "elastic:25ELstkP*", "http://localhost:9200/_cat/health?h=status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  setup:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    command: >
+      bash -c '
+        echo "Setting up users and passwords..."
+        until curl -s -X GET -u elastic:25ELstkP* "http://elasticsearch:9200/_cluster/health?wait_for_status=yellow&timeout=60s"; do
+          echo "Waiting for Elasticsearch..."
+          sleep 2
+        done
+        echo "Creating kibana_system user..."
+        curl -s -X POST -u elastic:25ELstkP* -H "Content-Type: application/json" "http://elasticsearch:9200/_security/user/kibana_system/_password" -d "{\"password\":\"25ELstkP*\"}" || true
+        echo "Creating dedicated APM user..."
+        curl -s -X POST -u elastic:25ELstkP* -H "Content-Type: application/json" "http://elasticsearch:9200/_security/user/apm_writer" -d "{\"password\":\"25ELstkP*\",\"roles\":[\"apm_system\",\"ingest_admin\",\"kibana_admin\",\"superuser\"]}" || true
+        echo "Verifying apm_writer user..."
+        curl -s -u apm_writer:25ELstkP* "http://elasticsearch:9200/_security/_authenticate" || echo "User verification failed"
+        echo "Setup completed successfully"
+      '
+    environment:
+      - TZ=Europe/Istanbul
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=25ELstkP*
+      - SERVER_PUBLICBASEURL=http://localhost:5601
+      - xpack.security.enabled=true  # Enable security
+      - xpack.fleet.agents.elasticsearch.hosts=["http://elasticsearch:9200"]
+      - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
+      - TZ=Europe/Istanbul
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      setup:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-f", "http://localhost:5601/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:8.13.0
+    volumes:
+      - ./apm-server.yml:/usr/share/apm-server/apm-server.yml:ro
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+      setup:
+        condition: service_completed_successfully
+    environment:
+      - TZ=Europe/Istanbul
+    ports:
+      - "8200:8200"
+    logging:
+      driver: "local"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  fleet-server:  # Now properly configured with security
+    image: docker.elastic.co/beats/elastic-agent:8.13.0
+    environment:
+      - FLEET_SERVER_ENABLE=1
+      - FLEET_SERVER_ELASTICSEARCH_HOST=http://elasticsearch:9200
+      - FLEET_SERVER_ELASTICSEARCH_USERNAME=elastic
+      - FLEET_SERVER_ELASTICSEARCH_PASSWORD=25ELstkP*
+      - FLEET_SERVER_POLICY_ID=fleet-server-policy
+      - KIBANA_FLEET_SETUP=1
+      - KIBANA_FLEET_HOST=http://kibana:5601
+      - KIBANA_FLEET_USERNAME=elastic
+      - KIBANA_FLEET_PASSWORD=25ELstkP*
+      - FLEET_SERVER_HOST=0.0.0.0
+      - FLEET_SERVER_PORT=8220
+      - FLEET_SERVER_INSECURE_HTTP=true  # Allow HTTP for dev
+      - TZ=Europe/Istanbul
+    ports:
+      - "8220:8220"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy  # Wait for Kibana to be fully ready
+      setup:
+        condition: service_completed_successfully
+
+volumes:
+  esdata:

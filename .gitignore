@@ -1,0 +1,384 @@
+# =============================================================================
+# COMPREHENSIVE .GITIGNORE FOR ELASTIC APM SERVER PROJECT
+# =============================================================================
+
+# =============================================================================
+# JAVA & MAVEN
+# =============================================================================
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+!**/src/main/**/
+!**/src/test/**/
+# Keep essential JAR files but exclude them from nested directories
+!/jar-dir/*.jar
+
+# Virtual machine crash logs
+hs_err_pid*
+replay_pid*
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.mvn/
+mvnw
+mvnw.cmd
+
+# Maven dependency plugin
+dependency-reduced-pom.xml
+
+# Maven Surefire plugin
+.surefire/
+
+# =============================================================================
+# SPRING BOOT
+# =============================================================================
+
+# Spring Boot build info
+build-info.properties
+
+# Spring Boot DevTools restart marker
+.spring-boot-devtools.restarttriggerfile
+
+# =============================================================================
+# ELASTIC STACK & APM
+# =============================================================================
+
+# Elasticsearch data
+esdata/
+elasticsearch/data/
+elasticsearch/logs/
+
+# Kibana data and logs
+kibana/data/
+kibana/logs/
+kibana/optimize/
+
+# APM Server data and logs
+apm-server/data/
+apm-server/logs/
+
+# Elastic Agent data
+elastic-agent/data/
+elastic-agent/logs/
+
+# Fleet Server data
+fleet-server/data/
+
+# APM traces and metrics (if stored locally)
+traces/
+metrics/
+apm_data/
+
+# =============================================================================
+# DOCKER & CONTAINERS
+# =============================================================================
+
+# Docker volumes and bind mounts
+.docker/
+docker-data/
+volumes/
+
+# Docker Compose override files
+docker-compose.override.yml
+docker-compose.override.yaml
+
+# Docker environment files (may contain secrets)
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+
+# Container logs
+containers/
+
+# =============================================================================
+# IDE & EDITORS
+# =============================================================================
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+.metadata
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+
+# Atom
+.atom/
+
+# =============================================================================
+# OPERATING SYSTEM
+# =============================================================================
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# =============================================================================
+# CONFIGURATION & SECRETS
+# =============================================================================
+
+# Configuration files that may contain sensitive data
+**/application-local.yml
+**/application-local.yaml
+**/application-local.properties
+**/application-dev.yml
+**/application-dev.yaml
+**/application-dev.properties
+**/application-prod.yml
+**/application-prod.yaml
+**/application-prod.properties
+
+# Secret files
+secrets/
+*.secret
+*.key
+*.pem
+*.p12
+*.jks
+*.keystore
+*.truststore
+
+# SSL certificates
+*.crt
+*.cert
+*.ca-bundle
+
+# API keys and tokens
+api-keys.txt
+tokens.txt
+credentials.txt
+
+# =============================================================================
+# TEMPORARY & CACHE FILES
+# =============================================================================
+
+# Temporary directories
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Cache directories
+.cache/
+cache/
+.gradle/
+
+# Node.js (if any frontend components)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# Python (if any Python scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+.env
+
+# =============================================================================
+# BUILD & DEPLOYMENT
+# =============================================================================
+
+# Build directories
+build/
+dist/
+out/
+
+# Deployment artifacts
+*.war
+*.ear
+*.nar
+
+# Packaging
+*.tar.gz
+*.zip
+*.rar
+
+# =============================================================================
+# MONITORING & PROFILING
+# =============================================================================
+
+# JProfiler
+*.jprofiler
+
+# YourKit
+*.ysession
+
+# Flight Recorder
+*.jfr
+
+# Heap dumps
+*.hprof
+heapdump*
+
+# GC logs
+gc*.log
+gc*.log.*
+
+# =============================================================================
+# TEST RESULTS & COVERAGE
+# =============================================================================
+
+# Test results
+**/TEST-*.xml
+test-results/
+test-output/
+
+# Coverage reports
+coverage/
+.nyc_output/
+jacoco.exec
+*.lcov
+
+# Mutation testing
+pitest/
+
+# =============================================================================
+# DATABASE
+# =============================================================================
+
+# H2 Database files (if running standalone)
+*.db
+*.mv.db
+*.trace.db
+
+# Database backups
+*.sql.bak
+*.dump
+
+# =============================================================================
+# CUSTOM PROJECT-SPECIFIC
+# =============================================================================
+
+# Generated documentation
+docs/generated/
+
+# Local configuration overrides
+local-config/
+local/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Editor backup files
+*.orig
+
+# Custom scripts for local development
+local-*.sh
+local-*.bat
+
+# Performance test results
+perf-results/
+
+# Local APM data exports
+apm-exports/
+
+# Custom log configurations
+logback-local.xml
+log4j2-local.xml

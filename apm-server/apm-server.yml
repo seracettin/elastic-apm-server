@@ -1,0 +1,16 @@
+apm-server:
+  host: "0.0.0.0:8200"
+  data_streams.enabled: false
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  username: "apm_writer"
+  password: "25ELstkP*"
+  index: "apm-%{[observer.version]}-%{+yyyy.MM.dd}"
+  template.name: "apm"
+  template.pattern: "apm-*"
+
+logging.level: error
+
+setup.template.enabled: true
+setup.template.overwrite: true 
