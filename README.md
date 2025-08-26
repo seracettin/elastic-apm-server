@@ -33,8 +33,11 @@ This repository contains a complete Elastic APM (Application Performance Monitor
 3. **Build and run the test application:**
    ```bash
    cd "java app"
-   mvn clean package
-   java [JVM_OPTIONS] -jar target/apm-test-app-1.0.0.jar
+   #run the app
+   ./run-with-apm.bat
+   
+   #test the app
+   ./test-endpoints.bat
    ```
 
 ## ☕ Java Agent Configuration
@@ -49,8 +52,8 @@ https://github.com/elastic/apm-agent-java/releases/download/v1.45.0/elastic-apm-
 Add these JVM options when starting your Java application:
 
 ```bash
--javaagent:D:\Doc\atmosware\to-dropboz\java\java-agent\ElasticAPM\jar\elastic-apm-agent-1.45.0.jar
--Delastic.apm.service_name=ems-order
+-javaagent:D:..\jar-dir\elastic-apm-agent-1.45.0.jar
+-Delastic.apm.service_name=apm-test-app
 -Delastic.apm.server_url=http://localhost:8200
 -Delastic.apm.secret_token=
 -Delastic.apm.application_packages=com.example.apmtest

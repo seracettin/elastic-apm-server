@@ -30,7 +30,7 @@ echo "APM Server URL: http://localhost:8200"
 echo "========================================"
 
 java -javaagent:"$APM_AGENT_PATH" \
-     -Delastic.apm.service_name=amp-test-app \
+     -Delastic.apm.service_name=apm-test-app \
      -Delastic.apm.server_url=http://localhost:8200 \
      -Delastic.apm.secret_token= \
      -Delastic.apm.application_packages=com.example.apmtest \
