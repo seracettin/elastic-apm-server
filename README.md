@@ -45,7 +45,7 @@ This repository contains a complete Elastic APM (Application Performance Monitor
 ### Download the Elastic APM Java Agent
 
 Download the latest Elastic APM Java agent from:
-https://github.com/elastic/apm-agent-java/releases/download/v1.45.0/elastic-apm-agent-1.45.0.jar
+https://repo1.maven.org/maven2/co/elastic/apm/elastic-apm-agent/1.45.0/elastic-apm-agent-1.45.0.jar
 
 ### JVM Options for APM Monitoring
 
