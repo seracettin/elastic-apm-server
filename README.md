@@ -28,6 +28,8 @@ This repository contains a complete Elastic APM (Application Performance Monitor
 2. **Verify services are running:**
    - Elasticsearch: http://localhost:9200 (elastic/25ELstkP*)
    - Kibana: http://localhost:5601 (elastic/25ELstkP*)
+   login and add apm integration , it is necessary.
+  video link https://youtu.be/3S7PKm3EOww?si=MA10gFkyVN6N2i2J
    - APM Server: http://localhost:8200
 
 3. **Build and run the test application:**
